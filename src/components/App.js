@@ -4,6 +4,7 @@ import AddTask from "./AddTask";
 import TaskList from "./TaskList";
 
 class TodoApp extends Component {
+  counter = 5;
   state = {
     tasks: [
       {
@@ -40,7 +41,6 @@ class TodoApp extends Component {
   };
 
   deleteTask = (id) => {
-    // console.log("delete" + id);
     const tasks = [...this.state.tasks];
     const index = tasks.findIndex((task) => task.id === id);
     tasks.splice(index, 1);
@@ -48,7 +48,6 @@ class TodoApp extends Component {
   };
 
   markAsDone = (id) => {
-    console.log("done" + id);
     const tasks = [...this.state.tasks];
     tasks.forEach((task) => {
       if (task.id === id) {
@@ -58,6 +57,21 @@ class TodoApp extends Component {
     });
     this.setState({ tasks });
   };
+
+  addTask = (content) => {
+    const task = {
+      id: this.counter,
+      content,
+      finishDate: null,
+      done: false,
+    };
+    this.counter++;
+    this.setState((prevState) => ({
+      tasks: [...prevState.tasks, task], // nowa tablica ze starych elementów plus nowy task na końcu
+    }));
+    return true;
+  };
+
   render() {
     return (
       <main className="app">
@@ -65,7 +79,7 @@ class TodoApp extends Component {
           <h1>TODO APP</h1>
         </header>
         <section>
-          <AddTask />
+          <AddTask add={this.addTask} />
           <TaskList
             tasks={this.state.tasks}
             delete={this.deleteTask}
